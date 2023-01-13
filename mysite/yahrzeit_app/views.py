@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 # from django.template import loader
 from django.shortcuts import render
+from yahrzeit_app import helpers
 
 #home - intro and form to calculate yahrzeit date
 def index(request):
@@ -24,4 +25,7 @@ def calculate(request):
     else:
         logged_in = False
         # go to page that shows result and asks to login/create acct
-    return render()
+
+    next_date_h, next_date_g, is_it_today = helpers.get_next_date(decedent_date)
+    
+    return HttpResponse(str(next_date_h) + str(next_date_g), str(is_it_today))
