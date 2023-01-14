@@ -3,8 +3,7 @@
 {% block title %}Homepage{% endblock %}
 
 {% block body %}
-<a href="{% url 'create_account' %}">Create Account</a>
-<h1>Hello world</h1>
+<a href="{% url 'create_account_form' %}">Create Account</a>
 <form action="{% url 'calculate' %}" method="post">
     {% csrf_token %}
     <fieldset>
@@ -12,8 +11,8 @@
         <input type="text" name="decedent-name" id="decedent-name" placeholder="Name">
         <label for="decedent-name" hidden>Decedent's Name</label><br>
         <input type="date" name="decedent-date" id="decedent-date">
-        <label for="decedent-date" hidden>Date></label><br>
+        <label for="decedent-date" hidden>Date</label><br>
     </fieldset>
-    <input type="submit" value="submit">
+    <input type="submit" value="Submit">
 </form>
 {% endblock %}
