@@ -4,6 +4,7 @@
 
 {% block body %}
 <a href="{% url 'create_account_form' %}">Create Account</a>
+<a href="{% url 'login_form' %}">Log In</a>
 <form action="{% url 'calculate' %}" method="post">
     {% csrf_token %}
     <fieldset>
