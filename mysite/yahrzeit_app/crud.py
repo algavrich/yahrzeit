@@ -1,6 +1,6 @@
 """CRUD module for yahrzeit app."""
 
-from yahrzeit_app.models import User
+from yahrzeit_app.models import User, Decedent
 
 
 def create_user(email: str, password: str) -> bool:
@@ -14,21 +14,6 @@ def create_user(email: str, password: str) -> bool:
         return False
 
 
-def safe_get(func):
-    """Decorator to handle DoesNotExist exceptions for queries."""
-
-    def wrapper_safe_get(*args, **kwargs):
-        """Wrapper to handle DoesNotExist exceptions for queries."""
-
-        try:
-            return func(*args, **kwargs)
-        except User.DoesNotExist:
-            return None
-
-    return wrapper_safe_get
-
-
-@safe_get
 def get_user_by_email(email:str) -> User:
     """Retrieve a User with given email if it exists.
     Otherwise, return None.
@@ -38,3 +23,13 @@ def get_user_by_email(email:str) -> User:
     return User.objects.filter(email=email).first()
 
     
+def create_decedent(user, name, death_date_hebrew, next_date_gregorian):
+    """Instantiate a Decedent with given attributes and save to database."""
+
+    new_decedent = Decedent(
+        user=user, 
+        name=name, 
+        death_date_hebrew=death_date_hebrew,
+        next_date_gregorian=next_date_gregorian,
+    )
+    new_decedent.save()
