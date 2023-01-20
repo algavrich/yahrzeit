@@ -103,8 +103,11 @@ def calculate(request):
 
     decedent_name = request.POST['decedent-name']
     decedent_date = request.POST['decedent-date']
+    num_years = int(request.POST['number'])
 
     next_date_h, next_date_g, is_it_today = helpers.get_next_date(decedent_date)
+
+    following_dates = helpers.get_following_dates(next_date_h, num_years-1)
 
     next_date_h = helpers.hebrew_date_stringify(next_date_h)
     next_date_g = helpers.gregorian_date_stringify(next_date_g)
@@ -120,13 +123,12 @@ def calculate(request):
         context = {
             'next_date_h': next_date_h,
             'next_date_g': next_date_g,
+            'following_dates': following_dates,
             'is_it_today': is_it_today,
             'decedent_name': decedent_name,
         }
 
         request.session['result'] = context
-
-        print(request.session['result'])
 
         return render(request, 'result.html', context)
         # go to page that shows result and asks to login/create acct
