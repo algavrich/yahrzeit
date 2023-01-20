@@ -6,20 +6,21 @@
 <a href="{% url 'create_account_form' %}">Create Account</a>
 <a href="{% url 'login_form' %}">Log In</a>
 <form action="{% url 'calculate' %}" method="post">
-    {% csrf_token %}
-    <fieldset>
-        <legend><h1>Calculate a Yahrzeit</h1></legend>
-        <input
-            type="text"
-            name="decedent-name"
-            id="decedent-name"
-            placeholder="Name"
-            required
-        >
-        <label for="decedent-name" hidden>Decedent's Name</label><br>
-        <input type="date" name="decedent-date" id="decedent-date" required>
-        <label for="decedent-date" hidden>Date</label><br>
-    </fieldset>
-    <input type="submit" value="Submit">
+	{% csrf_token %}
+	<fieldset>
+		<legend><h1>Calculate a Yahrzeit</h1></legend>
+		<label for="decedent-name">Decedent's Name</label><br>
+		<input
+			type="text"
+			name="decedent-name"
+			id="decedent-name"
+			required
+		><br>
+		<label for="decedent-date">Date of Death</label><br>
+		<input type="date" name="decedent-date" id="decedent-date" required><br>
+		<label for="number">Number of Years to Calculate</label><br>
+		<input type="number" name="number" id="number" min="1" max="20" value="1">
+	</fieldset>
+	<input type="submit" value="Submit">
 </form>
 {% endblock %}
