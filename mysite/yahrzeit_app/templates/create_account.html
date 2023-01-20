@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block body %}
+<form action="{% url 'create_account' %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend><h1>Create Account</h1></legend>
+        <input type="email" name="email" id="email" placeholder="Email">
+        <label for="email" hidden>Email</label><br>
+        <input type="password" name="password" id="password" placeholder="Password">
+        <label for="password" hidden>Password</label><br>
+    </fieldset>
+    <input type="submit" value="Create Account">
+</form>
+{% endblock %}
