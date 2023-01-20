@@ -31,3 +31,14 @@ def get_next_date(date_string:str):
         is_it_today = True
         
     return (next_date_h, next_date_g, is_it_today)
+
+
+def hebrew_date_stringify(hebrew_date: dates.HebrewDate) -> str:
+    """Format Hebrew date as a string."""
+
+    return f'{hebrew_date: %-d %B} {hebrew_date.year}'
+
+def gregorian_date_stringify(gregorian_date: dates.GregorianDate) -> str:
+    """Format Gregorian date as a string."""
+
+    return f'{gregorian_date: %-d %B %Y}'
