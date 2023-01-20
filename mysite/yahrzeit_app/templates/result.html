@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Result{% endblock %}
+
+{% block body %}
+{% if is_it_today %}
+<p>
+    Today is {{ decedent_name }}'s yahrzeit and the next yahrzeit is {{ next_date_h }} / {{next_date_g}}
+</p>
+{% else %}
+<p>
+  {{ decedent_name }}'s next yahrzeit is {{ next_date_h }} / {{next_date_g}}
+</p>
+{% endif %}
+
+<p>
+  If you would like to save your loved one's yahrzeit, create an account or log in. 
+</p>
+<a href="{% url 'create_account_form' %}">Create Account</a>
+<a href="{% url 'login_form' %}">Log In</a>
+{% endblock %}
