@@ -29,21 +29,24 @@ def create_account(request):
     password = request.POST['password']
 
     if crud.create_user(email, password):
-        # Flash success
         messages.add_message(
             request,
             messages.INFO,
             'Account successfully created',
         )
+        # if result in session, write it to DB
+        request.session["user_id"] = crud.get_user_by_email(email).pk
+
+        return redirect('dashboard')
+    
     else:
-        # Flash not success
         messages.add_message(
             request,
             messages.INFO,
             'That email is already asssociated with an account',
         )
 
-    return redirect('index')
+        return redirect('index')
 
 
 #login
@@ -72,7 +75,7 @@ def login(request):
             messages.INFO,
             'Logged in successfully',
         )
-
+        # If result in session, write to DB
         return redirect('dashboard')
     else:
         #Redirect to index, flash either username or password incorrect
@@ -100,16 +103,32 @@ def calculate(request):
 
     decedent_name = request.POST['decedent-name']
     decedent_date = request.POST['decedent-date']
-    # if user in session
-    if request.session.get('user_id'):
-        logged_in = True
-        # write to db
-        # display new date on dashboard
-    # else
-    else:
-        logged_in = False
-        # go to page that shows result and asks to login/create acct
 
     next_date_h, next_date_g, is_it_today = helpers.get_next_date(decedent_date)
+
+    next_date_h = helpers.hebrew_date_stringify(next_date_h)
+    next_date_g = helpers.gregorian_date_stringify(next_date_g)
+
+    # if user in session
+    if request.session.get('user_id'):
+        pass
+        # write to db
+        # display new date on dashboard
+        
+    # else
+    else:
+        context = {
+            'next_date_h': next_date_h,
+            'next_date_g': next_date_g,
+            'is_it_today': is_it_today,
+            'decedent_name': decedent_name,
+        }
+
+        request.session['result'] = context
+
+        print(request.session['result'])
+
+        return render(request, 'result.html', context)
+        # go to page that shows result and asks to login/create acct
     
     return HttpResponse(str(next_date_h) + str(next_date_g), str(is_it_today))
