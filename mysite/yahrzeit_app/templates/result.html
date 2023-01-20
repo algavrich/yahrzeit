@@ -13,6 +13,11 @@
 </p>
 {% endif %}
 
+<h3>Upcoming Yahrzeit Dates:</h3>
+{% for h_date, g_date in following_dates.items %}
+<p>Hebrew: {{ h_date }} Gregorian: {{ g_date }}</p>
+{% endfor %}
+
 <p>
   If you would like to save your loved one's yahrzeit, create an account or log in. 
 </p>
