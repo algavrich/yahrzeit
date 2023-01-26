@@ -3,7 +3,7 @@
 {% block title %}Log In{% endblock %}
 
 {% block body %}
-<a href="{% url 'create_account_form' %}">Create Account</a>
+<!-- <a href="{% url 'create_account_form' %}">Create Account</a> -->
 <form action="{% url 'login' %}" method="post">
 	{% csrf_token %}
 	<fieldset>
