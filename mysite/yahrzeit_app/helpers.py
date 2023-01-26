@@ -3,9 +3,15 @@
 from pyluach import dates
 from datetime import datetime
 
-from typing import Dict, AnyStr
-#hebrew date has a month and day. we need to find occurance of next month and day. What is curr year
+#converting a gregorian string to a hebrew string
+def greg_to_heb(greg_str):
+    #parse date
+    date_as_date = datetime.strptime(greg_str, '%Y-%m-%d').date()
+    #convert to hebrew date obj
+    heb_date = dates.HebrewDate.from_pydate(date_as_date)
+    return hebrew_date_stringify(heb_date)
 
+#hebrew date has a month and day. we need to find occurance of next month and day. What is curr year
 def get_next_date(date_string:str):
     date_as_date = datetime.strptime(date_string, '%Y-%m-%d').date()
     #instantiate a gregorian date with our values
@@ -31,7 +37,7 @@ def get_next_date(date_string:str):
         next_date_h = dates.HebrewDate(today_h.year + 1, hebrew_date.month, hebrew_date.day)
         next_date_g = next_date_h.to_greg()
         is_it_today = True
-        
+
     return (next_date_h, next_date_g, is_it_today)
 
 
@@ -53,7 +59,7 @@ def get_following_dates(
     ):
     """Return dictionary of hebrew and gregorian dates for specified number
     of future years.
-    
+
     """
 
     #create empty dict for dates
