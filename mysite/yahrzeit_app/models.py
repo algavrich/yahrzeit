@@ -26,10 +26,10 @@ class Decedent(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	name = models.CharField(max_length=50)
 	death_date_hebrew = models.CharField(max_length=10)
+	next_date_hebrew = models.CharField(max_length=10)
 	next_date_gregorian = models.DateField()
-	
+
 	def __repr__(self) -> str:
 		"""String representation for Decedent."""
 
 		return f"<Decedent name={self.name}>"
-	

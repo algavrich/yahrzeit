@@ -9,7 +9,7 @@ from yahrzeit_app import crud
 #home - intro and form to calculate yahrzeit date
 def index(request):
     """Render homepage."""
-    
+
     if request.session.get('user_id'):
         return redirect('dashboard')
 
@@ -34,11 +34,25 @@ def create_account(request):
             messages.INFO,
             'Account successfully created',
         )
+        user = crud.get_user_by_email(email)
         # if result in session, write it to DB
-        request.session["user_id"] = crud.get_user_by_email(email).pk
+        request.session["user_id"] = user.pk
+
+        # request.session['result']['decedent_name']
+        result = request.session.get('result')
+
+        if result:
+            crud.create_decedent(
+                user,
+                result['decedent_name'],
+                result['death_date_h'],
+                result['next_date_h'],
+                result['next_date_g'],
+            )
+            del request.session['result']
 
         return redirect('dashboard')
-    
+
     else:
         messages.add_message(
             request,
@@ -76,6 +90,18 @@ def login(request):
             'Logged in successfully',
         )
         # If result in session, write to DB
+        result = request.session.get('result')
+
+        if result:
+            crud.create_decedent(
+                user,
+                result['decedent_name'],
+                result['death_date_h'],
+                result['next_date_h'],
+                result['next_date_g'],
+            )
+            del request.session['result']
+
         return redirect('dashboard')
     else:
         #Redirect to index, flash either username or password incorrect
@@ -95,6 +121,7 @@ def dashboard(request):
         return redirect('index')
 
     return HttpResponse('This is the dashboard.')
+
 
 #calculate
 def calculate(request):
@@ -117,10 +144,10 @@ def calculate(request):
         pass
         # write to db
         # display new date on dashboard
-        
+
     # else
     else:
-        context = {
+        template_context = {
             'next_date_h': next_date_h,
             'next_date_g': next_date_g,
             'following_dates': following_dates,
@@ -128,9 +155,16 @@ def calculate(request):
             'decedent_name': decedent_name,
         }
 
-        request.session['result'] = context
+        result_for_sesh = {
+            'decedent_name': decedent_name,
+            'death_date_h': helpers.greg_to_heb(decedent_date),
+            'next_date_h': next_date_h,
+            'next_date_g': next_date_g,
+        }
 
-        return render(request, 'result.html', context)
+        request.session['result'] = result_for_sesh
+
+        return render(request, 'result.html', template_context)
         # go to page that shows result and asks to login/create acct
-    
+
     return HttpResponse(str(next_date_h) + str(next_date_g), str(is_it_today))
