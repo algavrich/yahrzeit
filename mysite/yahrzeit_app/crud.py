@@ -14,7 +14,7 @@ def create_user(email: str, password: str) -> bool:
         return False
 
 
-def get_user_by_email(email:str) -> User:
+def get_user_by_email(email: str) -> User:
     """Retrieve a User with given email if it exists.
     Otherwise, return None.
 
