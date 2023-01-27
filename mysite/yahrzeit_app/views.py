@@ -7,6 +7,7 @@ from yahrzeit_app import helpers
 from yahrzeit_app import crud
 
 #home - intro and form to calculate yahrzeit date
+# TODO is request of type HttpRequest? (type hinting)
 def index(request):
     """Render homepage."""
 
@@ -111,16 +112,38 @@ def login(request):
             'Incorrect username or password',
         )
         return redirect('index')
+    
+
+def logout(request):
+    """Log current user out."""
+
+    user_id = request.session.get('user_id')
+
+    if not user_id:
+        return redirect('index')
+    
+    del request.session['user_id']
+
+    return redirect('index')
 
 
 #user dashboard - list of decedents and dates, option to add a decedent, option to recieve email reminders
 def dashboard(request):
     """Render user dashboard."""
 
-    if not request.session.get('user_id'):
-        return redirect('index')
+    user_id = request.session.get('user_id')
 
-    return HttpResponse('This is the dashboard.')
+    if not user_id:
+        return redirect('index')
+    
+    decedents = crud.get_decedents_for_user(user_id)
+    print(decedents)
+
+    context = {
+        'decedents': decedents,
+    }
+
+    return render(request, 'dashboard.html', context)
 
 
 #calculate
@@ -136,20 +159,32 @@ def calculate(request):
 
     following_dates = helpers.get_following_dates(next_date_h, num_years-1)
 
-    next_date_h = helpers.hebrew_date_stringify(next_date_h)
-    next_date_g = helpers.gregorian_date_stringify(next_date_g)
+    next_date_h_res = helpers.h_date_stringify_res(next_date_h)
+    next_date_g_res = helpers.g_date_stringify_res(next_date_g)
 
+    next_date_h_db = helpers.h_date_stringify_db(next_date_h)
+    next_date_g_db = helpers.g_date_stringify_db(next_date_g)
+
+    user_id = request.session.get('user_id')
     # if user in session
-    if request.session.get('user_id'):
-        pass
+    if user_id:
+        user = crud.get_user_by_id(user_id)
         # write to db
+        crud.create_decedent(
+            user,
+            decedent_name,
+            helpers.greg_to_heb(decedent_date),
+            next_date_h_db,
+            next_date_g_db,
+        )
         # display new date on dashboard
+        return redirect('dashboard')
 
     # else
     else:
         template_context = {
-            'next_date_h': next_date_h,
-            'next_date_g': next_date_g,
+            'next_date_h': next_date_h_res,
+            'next_date_g': next_date_g_res,
             'following_dates': following_dates,
             'is_it_today': is_it_today,
             'decedent_name': decedent_name,
@@ -158,13 +193,11 @@ def calculate(request):
         result_for_sesh = {
             'decedent_name': decedent_name,
             'death_date_h': helpers.greg_to_heb(decedent_date),
-            'next_date_h': next_date_h,
-            'next_date_g': next_date_g,
+            'next_date_h': next_date_h_db,
+            'next_date_g': next_date_g_db,
         }
 
         request.session['result'] = result_for_sesh
 
         return render(request, 'result.html', template_context)
         # go to page that shows result and asks to login/create acct
-
-    return HttpResponse(str(next_date_h) + str(next_date_g), str(is_it_today))
