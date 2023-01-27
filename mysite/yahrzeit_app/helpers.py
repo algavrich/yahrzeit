@@ -1,15 +1,17 @@
 """Helper module for Yahrzeit app."""
 
 from pyluach import dates
-from datetime import datetime
+from datetime import datetime, date
 
 #converting a gregorian string to a hebrew string
 def greg_to_heb(greg_str):
     #parse date
-    date_as_date = datetime.strptime(greg_str, '%Y-%m-%d').date()
     #convert to hebrew date obj
-    heb_date = dates.HebrewDate.from_pydate(date_as_date)
-    return hebrew_date_stringify(heb_date)
+    return h_date_stringify_db(
+        dates.HebrewDate.from_pydate(
+            datetime.strptime(greg_str, '%Y-%m-%d').date()
+        )
+    )
 
 #hebrew date has a month and day. we need to find occurance of next month and day. What is curr year
 def get_next_date(date_string:str):
@@ -41,16 +43,28 @@ def get_next_date(date_string:str):
     return (next_date_h, next_date_g, is_it_today)
 
 
-def hebrew_date_stringify(hebrew_date: dates.HebrewDate) -> str:
-    """Format Hebrew date as a string."""
+def h_date_stringify_res(hebrew_date: dates.HebrewDate) -> str:
+    """Format Hebrew date as a string for result."""
 
-    return f'{hebrew_date: %-d %B} {hebrew_date.year}'
+    return f'{hebrew_date:%-d %B} {hebrew_date.year}'
 
 
-def gregorian_date_stringify(gregorian_date: dates.GregorianDate) -> str:
-    """Format Gregorian date as a string."""
+def g_date_stringify_res(gregorian_date: dates.GregorianDate) -> str:
+    """Format Gregorian date as a string for result."""
 
-    return f'{gregorian_date: %-d %B %Y}'
+    return f'{gregorian_date:%-d %B %Y}'
+
+
+def h_date_stringify_db(hebrew_date: dates.HebrewDate) -> str:
+    """Format Hebrew date as a string for database."""
+
+    return f'{hebrew_date:%Y-%m-%d}'
+
+
+def g_date_stringify_db(gregorian_date: dates.GregorianDate) -> date:
+    """Format Gregorian date as a string for storage in session."""
+
+    return f'{gregorian_date:%Y-%m-%d}'
 
 
 def get_following_dates(
@@ -78,8 +92,8 @@ def get_following_dates(
 
         #turn dates to strings and add to dict
         following_dates[
-            hebrew_date_stringify(following_date_h)
-        ] = gregorian_date_stringify(following_date_g)
+            h_date_stringify_res(following_date_h)
+        ] = g_date_stringify_res(following_date_g)
 
     #return dict
     return following_dates
