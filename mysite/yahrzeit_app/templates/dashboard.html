@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<h1>Your Dashboard</h1>
+<a href="{% url 'logout' %}">Log Out</a>
+{% for d in decedents %}
+<p>
+    {{ d.name }}'s next yahrzeit is {{ d.next_date_hebrew }} / {{ d.next_date_gregorian }}
+</p>
+{% endfor %}
+{% endblock %}
