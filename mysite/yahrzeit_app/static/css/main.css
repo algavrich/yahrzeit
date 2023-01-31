@@ -1,7 +1,20 @@
 @import url("https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/ibm-plex-sans.min.css");
-body {
-  background-color:#010101 !important;
+
+html, body { height: 100%;}
+
+body > footer {
+  position: sticky;
+  top: 100vh;
 }
+
+body {
+  background: url('https://media.istockphoto.com/id/637537788/photo/burning-candles-on-a-black-background.jpg?s=612x612&w=0&k=20&c=Rw8fXnBG-YqRxzJ-btBIZ3g27Zjaf-QOj0ojYR6hTdc=') no-repeat center fixed;
+  background-color: #010101;
+  background-size: contain;
+  display: flex;
+  flex-direction: column;
+}
+
 
 h1 {
   font-family: 'IBM Plex Sans', sans-serif;
@@ -137,12 +150,14 @@ label {
   box-shadow: 1px 1px 15px 0 rgb(0 0 0 / 10%);
 
 }
-.bg-image {
+/* .bg-image {
   margin: auto;
   padding-top: 8rem;
   padding-bottom: 8rem;
-  background-position: 50% 50%;
-}
+  background-position: 10% 90%;
+  width: 100%;
+  height: auto;
+} */
 .calculator-wrapper {
   position: relative;
   z-index: 1000;
@@ -365,9 +380,9 @@ label {
 
 /* footer */
 .dark-section-footer {
-  position: relative;
+  position: absolute;
   z-index: 999;
-  display: block;
+  display: inline-block;
   width: 100%;
   padding-top: 50px;
   padding-right: 0px;
@@ -383,7 +398,7 @@ label {
   text-align: center;
 }
 .fixed-bottom {
-  position: absolute;
+  position: sticky;
   right: 0;
   bottom: 0;
   left: 0;

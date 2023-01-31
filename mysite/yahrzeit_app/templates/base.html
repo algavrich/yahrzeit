@@ -40,10 +40,9 @@
             <div class="navbar-nav">
                 <a class="navigation-link-2022 big w-nav-link" href="{% url 'login_form' %}">Login</a>
             </div>
-
           </div>
       </div>
-  </nav>
+    </nav>
 
     {% if messages %}
     <div class="messages">
@@ -56,31 +55,33 @@
     {% block body %}{% endblock %}
 
     {% block after_body %}{% endblock %}
-    <div class="footer wf-section fixed-bottom">
-      <div class="dark-section-footer navbar-fixed-bottom">
-        <div class="w-layout-grid footer-grid-4">
-          <div class="footer-grid-item logo-column">
-            <h4 class="headline">Yahrzeit</h4>
-            <div class="div-block-51">
-              <p class="footer-text">Celebrate your loved ones.</p>
+    <footer>
+      <div class="footer wf-section fixed-bottom">
+        <div class="dark-section-footer navbar-fixed-bottom fixed-bottom">
+          <div class="w-layout-grid footer-grid-4">
+            <div class="footer-grid-item logo-column">
+              <h4 class="headline">Yahrzeit</h4>
+              <div class="div-block-51">
+                <p class="footer-text">Celebrate your loved ones.</p>
+              </div>
             </div>
-          </div>
-          <div id="w-node-e2614b17-f0fd-3ff9-42dd-4e8c381b3c03-c432da1b" class="footer-grid-item">
-            <h4 class="headline">Connect</h4>
-            <div class="div-block-51">
-              <p class="footer-text">
-                <a href="{% url 'create_account_form' %}" class="footer-link">Create Account</a>
-              </p>
-              <p class="footer-text">
-                <a href="{% url 'login_form' %}" class="footer-link">Login</a>
-              </p>
-              <p class="footer-text">
-                <a href="" class="footer-link">What is a Yahrzeit?</a>
-              </p>
+            <div id="w-node-e2614b17-f0fd-3ff9-42dd-4e8c381b3c03-c432da1b" class="footer-grid-item">
+              <h4 class="headline">Connect</h4>
+              <div class="div-block-51">
+                <p class="footer-text">
+                  <a href="{% url 'create_account_form' %}" class="footer-link">Create Account</a>
+                </p>
+                <p class="footer-text">
+                  <a href="{% url 'login_form' %}" class="footer-link">Login</a>
+                </p>
+                <p class="footer-text">
+                  <a href="" class="footer-link">What is a Yahrzeit?</a>
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   </body>
 </html>
