@@ -12,7 +12,7 @@ class User(models.Model):
 	def __repr__(self) -> str:
 		"""String representation for User."""
 
-		return f"<User username={self.username}>"
+		return f"<User email={self.email}>"
 
 	def check_password(self, password: str) -> bool:
 		"""Return True if password matches, False otherwise."""
@@ -27,7 +27,7 @@ class Decedent(models.Model):
 	name = models.CharField(max_length=50)
 	death_date_hebrew = models.CharField(max_length=10)
 	next_date_hebrew = models.CharField(max_length=10)
-	next_date_gregorian = models.DateField()
+	next_date_gregorian = models.CharField(max_length=10)
 
 	def __repr__(self) -> str:
 		"""String representation for Decedent."""
