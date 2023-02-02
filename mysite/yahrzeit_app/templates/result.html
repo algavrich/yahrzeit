@@ -3,24 +3,30 @@
 {% block title %}Result{% endblock %}
 
 {% block body %}
-{% if is_it_today %}
-<p>
-    Today is {{ decedent_name }}'s yahrzeit and the next yahrzeit is {{ next_date_h }} / {{next_date_g}}
-</p>
-{% else %}
-<p>
-  {{ decedent_name }}'s next yahrzeit is {{ next_date_h }} / {{next_date_g}}
-</p>
-{% endif %}
+<div class="d-flex flex-column form-center calculator-wrapper justify-content-center align-items-center" style="min-height: 100vh">
 
-<h3>Upcoming Yahrzeit Dates:</h3>
-{% for h_date, g_date in following_dates.items %}
-<p>Hebrew: {{ h_date }} Gregorian: {{ g_date }}</p>
-{% endfor %}
+  {% if is_it_today %}
+  <h3>
+      Today is {{ decedent_name }}'s yahrzeit and the next yahrzeit is {{ next_date_h }} which is {{next_date_g}}.
+  </h3>
+  {% else %}
+  <h3>
+    {{ decedent_name }}'s next yahrzeit is {{ next_date_h }} which is {{next_date_g}}.
+  </h3>
+  {% endif %}
+  <br><br>
 
-<p>
-  If you would like to save your loved one's yahrzeit, create an account or log in. 
-</p>
-<a href="{% url 'create_account_form' %}">Create Account</a>
-<a href="{% url 'login_form' %}">Log In</a>
+
+  <h4>Upcoming Yahrzeit Dates:</h4><br>
+  {% for h_date, g_date in following_dates.items %}
+  <h5>Hebrew: {{ h_date }} - Gregorian: {{ g_date }}</h5>
+  {% endfor %}
+  <br><br>
+
+  <h5>
+    If you would like to save your loved one's yahrzeit, create an account or log in.
+  </h5>
+
+
+</div>
 {% endblock %}

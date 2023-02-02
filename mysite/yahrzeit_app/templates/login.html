@@ -3,16 +3,21 @@
 {% block title %}Log In{% endblock %}
 
 {% block body %}
-<!-- <a href="{% url 'create_account_form' %}">Create Account</a> -->
-<form action="{% url 'login' %}" method="post">
-	{% csrf_token %}
-	<fieldset>
-		<legend><h1>Log In</h1></legend>
-		<input type="email" name="email" id="email" placeholder="Email">
-		<label for="email" hidden>Email</label><br>
-		<input type="password" name="password" id="password">
-		<label for="password" hidden>Password</label><br>
-	</fieldset>
-	<input type="submit" value="Log In">
-</form>
+
+<div class="d-flex flex-column form-center calculator-wrapper justify-content-center align-items-center" style="min-height: 100vh">
+	<div class="form-center">
+		<form class="calculator-form justify-content-center" action="{% url 'login' %}" method="post" role="form">
+			{% csrf_token %}
+			<fieldset>
+				<legend><h2>Login</h2></legend><br>
+				<label for="email" hidden>Email</label><br>
+				<input type="email" class="account-input" name="email" id="email" placeholder="Email" required><br>
+				<label for="password" hidden>Password</label><br>
+				<input type="password" class="account-input" name="password" id="password" placeholder="Password">
+			</fieldset>
+			<br>
+			<input type="submit" class="btn-outlined--black"value="Login">
+		</form>
+	</div>
+</div>
 {% endblock %}

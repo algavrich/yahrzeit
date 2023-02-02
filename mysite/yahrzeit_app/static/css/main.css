@@ -18,16 +18,37 @@ body {
 
 h1 {
   font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 1.953em;
-  font-weight: 500 !important;
+  font-size: 100px;
+  font-weight: 400 !important;
   color: #ffffff;
+  line-height: 50px !important;
+  letter-spacing: .30em !important;
+  text-transform: uppercase !important;
+}
+
+h2 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 50px;
+  font-weight: 300 !important;
+  color: #ffffff;
+  line-height: 50px !important;
+  letter-spacing: .10em !important;
+  text-transform: uppercase !important;
+}
+h3 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 30px;
+  font-weight: 400 !important;
+  color: #ffffff;
+  line-height: 50px !important;
 }
 
 h4 {
+  font-family:'NewtalSans-Regular', sans-serif;
   color: #ffffff !important;
-  font-size: 1rem !important;
-  line-height: 1.5rem !important;
-  font-weight: 300 !important;
+  font-size: 14px !important;
+  line-height: 26px !important;
+  font-weight: 400 !important;
   letter-spacing: .12em !important;
   text-transform: uppercase !important;
 }
@@ -143,6 +164,7 @@ label {
   position: relative;
   z-index: 1000;
   max-width: 25rem;
+  align-items: center !important;
   margin-left: auto;
   padding: 2rem;
   border-radius: 0.5rem;
@@ -150,103 +172,64 @@ label {
   box-shadow: 1px 1px 15px 0 rgb(0 0 0 / 10%);
 
 }
-/* .bg-image {
-  margin: auto;
-  padding-top: 8rem;
-  padding-bottom: 8rem;
-  background-position: 10% 90%;
-  width: 100%;
-  height: auto;
-} */
+
 .calculator-wrapper {
-  position: relative;
   z-index: 1000;
-  max-width: 25rem;
-  margin-left: auto;
   padding: 2rem;
   border-radius: 0.5rem;
   background-color: rgb(8, 8, 8,.6);
   box-shadow: 1px 1px 15px 0 rgb(0 0 0 / 10%);
 }
 
-.innsite-button-navy{
+.form-center {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width:100%;
+  height:10em;
+}
 
+.form-center form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.decedent-input {
+  text-align: center;
+  border: none;
+  background-color: rgb(255, 255, 255, .2);
+  color: rgb(255, 255, 255, .6);
+  border-radius: 15px;
+  height: 30px;
+}
+
+.account-input {
+  text-align: center;
+  border: none;
+  background-color: rgb(255, 255, 255, .2);
+  color: rgb(255, 255, 255, .9);
+  border-radius: 15px;
+  height: 30px;
+}
+
+.btn-outlined--black {
   display: flex;
   min-width: 10rem;
   padding: 0.75rem 1.5rem;
   justify-content: center;
   align-items: center;
-  border-radius: 50px;
-  background-color: #101726;
-  transition: background-color 250ms;
-  color: #FFFFFF;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  font-weight: 500;
-  letter-spacing: .005em;
-}
-.innsite-button-green{
-
-  display: flex !important;
-  min-width: 10rem !important;
-  padding: 0.75rem 1.5rem !important;
-  justify-content: center !important;
-  align-items: center !important;
+  border: 1px solid #ffffff !important;
   border-radius: 50px !important;
-  background-color: #4C6353 !important;
+  background-color: rgba(255,255,255,0) !important;
   transition: background-color 250ms !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
   font-size: 1rem !important;
-  line-height: 1.5rem !important;
+  line-height: 1.3rem !important;
   font-weight: 500 !important;
   letter-spacing: .005em !important;
-}
-.innsite-button-ivory{
-
-  display: flex;
-  min-width: 10rem;
-  padding: 0.75rem 1.5rem;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50px;
-  background-color: #D9BBA9;
-  transition: background-color 250ms;
-  color: #1c2727;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  font-weight: 500;
-  letter-spacing: .005em;
-}
-.innsite-button-light{
-  display: flex;
-  min-width: 10rem;
-  padding: 0.75rem 1.5rem;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #898481;
-  border-radius: 50px;
-  background-color: rgba(255,255,255,0);
-  transition: background-color 250ms;
-  color: #2e2c2b;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  font-weight: 500;
-  letter-spacing: .005em;
-}
-.innsite-button-test{
-    display: flex;
-    min-width: 10rem;
-    padding: 0.75rem 1.5rem;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50px;
-    background-color: #8cc4c1;
-    transition: background-color 250ms;
-    color: #1c2727;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    font-weight: 500;
-    letter-spacing: .005em;
+  text-decoration: none !important;
 }
 .press-desktop {
   width: 100%
@@ -268,46 +251,6 @@ label {
   width: 100%;
 }
 
-.location-review {
-  background-color:rgba(217, 187, 169);
-  padding: 10px;
-}
-
-.location-list-wrapper {
-  display: block;
-  margin-right: -0.75rem;
-  margin-left: -0.75rem;
-  grid-auto-columns: 1fr;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-}
-
-.location-card__cover-img {
-  width: 100%;
-  margin-bottom: 0.5rem;
-  padding-top: 62%;
-  background-position: 50% 50%;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-.location-card__item {
-  width: 25%;
-  margin-bottom: 1.5rem;
-  padding-right: 0.75rem;
-  padding-left: 0.75rem;
-  cursor: pointer;
-}
-.location-card__columns {
-  display: flex;
-  width: 100%;
-  margin-top: 1rem;
-  flex-wrap: wrap;
-}
-.card-img-top {
-  width: 100%;
-  height: 15vw;
-  object-fit: cover;
-}
 
 .card-deck {
   flex-wrap: wrap;
@@ -316,7 +259,7 @@ label {
 .page-wrapper{
   margin: 0;
 }
-.placeholder{
+::placeholder{
   color: #FFFFFF;
 }
 .w-layout-grid {
@@ -362,21 +305,6 @@ label {
   align-items: center;
 }
 
-.arrival-departure-input {
-  border: none;
-  background-color: transparent;
-  color: #2E2C2B;
-}
-
-.amenity-tile {
-  display: inline-block;
-  margin: 0.25rem;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid rgba(34,34,34,.12);
-  border-radius: 0.25rem;
-  color: rgba(34,34,34,.75);
-  line-height: 1.5rem;
-}
 
 /* footer */
 .dark-section-footer {
