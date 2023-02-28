@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block title %}Homepage{% endblock %}
+
 {% block head %}
 
 {% endblock %}
+
 {% block body %}
 	<div class="d-flex flex-column form-center calculator-wrapper justify-content-center align-items-center" style="min-height: 100vh">
 		<div class="form-center">
@@ -21,6 +23,14 @@
 					><br><br>
 					<label for="decedent-date"><h4>Date of Death</h4></label><br>
 					<input type="date" name="decedent-date" class="decedent-input" id="decedent-date" required><br><br>
+					<label for="location">Location of Death</label><br>
+					<input type="text" id="location"><br><br>
+					<div id="TOD-radios">
+						<input type="radio" id="before-sunset" name="TOD" value="before-sunset">
+						<label for="before-sunset" id="before-sunset-label"><h4>Before Sunset</h4></label><br>
+						<input type="radio" id="after-sunset" name="TOD" value="after-sunset">
+						<label for="after-sunset" id="after-sunset-label"><h4>After Sunset</h4></label>
+					</div>
 					<label for="number"><h4>Number of Years to Calculate</h4></label><br>
 					<input type="number" name="number" id="number" class="decedent-input" min="1" max="20" value="1">
 				</fieldset>
@@ -29,9 +39,9 @@
 			</form>
 		</div>
 	</div>
+{% endblock %}
 
-
-
-
-
+{% block after_body %}
+<script src="/static/js/index.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ js_key }}&libraries=places&callback=useAutocomplete"></script>
 {% endblock %}
