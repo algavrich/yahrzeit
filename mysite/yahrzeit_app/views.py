@@ -2,9 +2,10 @@
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from yahrzeit_app import helpers
 from yahrzeit_app import crud
+
 
 #home - intro and form to calculate yahrzeit date
 # TODO is request of type HttpRequest? (type hinting)
@@ -13,8 +14,10 @@ def index(request):
 
     if request.session.get('user_id'):
         return redirect('dashboard')
+    
+    context = {'js_key': helpers.js_key}
 
-    return render(request, 'index.html')
+    return render(request, 'index.html', context)
 
 #create account
 def create_account_form(request):
@@ -153,9 +156,11 @@ def calculate(request):
 
     decedent_name = request.POST['decedent-name']
     decedent_date = request.POST['decedent-date']
+    sunset = request.POST['TOD']
+    after_sunset = False if sunset == 'before-sunset' else True
     num_years = int(request.POST['number'])
 
-    next_date_h, next_date_g, is_it_today = helpers.get_next_date(decedent_date)
+    next_date_h, next_date_g, is_it_today = helpers.get_next_date(decedent_date, after_sunset)
 
     following_dates = helpers.get_following_dates(next_date_h, num_years-1)
 
@@ -201,3 +206,11 @@ def calculate(request):
 
         return render(request, 'result.html', template_context)
         # go to page that shows result and asks to login/create acct
+
+
+def get_sunset_time(request, date_string, location_string):
+    """API endpoint that returns JSON data of sunset time for given day."""
+
+    sunset_time = helpers.get_sunset_time_helper(date_string, location_string)
+    
+    return JsonResponse({'sunset_time': sunset_time})
