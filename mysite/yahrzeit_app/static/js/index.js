@@ -11,7 +11,10 @@ function useAutocomplete() {
         fields: ["formatted_address", "geometry", "name"],
     };
 
-    const autoComplete = new google.maps.places.Autocomplete(locationInput, locationOptions);
+    const autoComplete = new google.maps.places.Autocomplete(
+        locationInput,
+        locationOptions,
+    );
 
     function getSunsetTimes() {
         if (dateInput.value && autoComplete.getPlace()) {
@@ -20,7 +23,10 @@ function useAutocomplete() {
             fetch(url)
             .then((res) => res.json())
             .then((resData) => {
-                const sunsetTime = resData['sunset_time'];
+                let sunsetTime = resData['sunset_time'];
+                if (sunsetTime === null) {
+                    sunsetTime = '\'Sunset\'';
+                }
                 document.getElementById('before-sunset-label').innerHTML = `Before ${sunsetTime}`;
                 document.getElementById('after-sunset-label').innerHTML = `After ${sunsetTime}`;
                 TODRadios.style.display = 'block';
