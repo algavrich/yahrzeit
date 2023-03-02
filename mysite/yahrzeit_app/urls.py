@@ -11,7 +11,7 @@ urlpatterns = [
         views.create_account_form,
         name='create_account_form',
     ),
-    path('create-account', views.create_account, name='create_account'),
+    path('api/create-account', views.create_account, name='create_account'),
     path('login-form', views.login_form, name='login_form'),
     path('login', views.login, name='login'),
     path('logout', views.logout, name='logout'),
