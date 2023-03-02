@@ -1,5 +1,6 @@
 """View functions for yahrzeit app."""
 
+import json
 from typing import Union
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -41,11 +42,12 @@ def create_account_form(request: HttpRequest) -> Union[
     return render(request, 'create_account.html')
 
 
-def create_account(request: HttpRequest) -> HttpResponseRedirect:
-    """Perform checks and save new account to database if checks pass."""
+def create_account(request: HttpRequest) -> JsonResponse:
+    """API!!! Perform checks and save new account to database if checks pass."""
 
-    email = request.POST['email']
-    password = request.POST['password']
+    request_data = json.loads(request.body)
+    email = request_data['email']
+    password = request_data['password']
 
     if crud.create_user(email, password):
         messages.add_message(
@@ -67,16 +69,10 @@ def create_account(request: HttpRequest) -> HttpResponseRedirect:
             )
             del request.session['result']
 
-        return redirect('dashboard')
+        return JsonResponse({'status': 'success'})
 
-    else:
-        messages.add_message(
-            request,
-            messages.INFO,
-            'That email is already asssociated with an account',
-        )
+    return JsonResponse({'status': 'failure'})
 
-        return redirect('index')
 
 
 def login_form(request: HttpRequest) -> Union[
