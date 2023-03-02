@@ -9,9 +9,16 @@ def create_user(email: str, password: str) -> bool:
     if not get_user_by_email(email):
         new_user = User(password=password, email=email)
         new_user.save()
+        
         return True
-    else:
-        return False
+    
+    return False
+
+
+def get_user_by_id(user_id: int) -> User:
+    """Retrieve a User with given id."""
+
+    return User.objects.filter(pk=user_id).first()
 
 
 def get_user_by_email(email: str) -> User:
@@ -39,9 +46,6 @@ def create_decedent(user: User, name: str, death_date_hebrew: str,
 def get_decedents_for_user(user_id):
     """Retrieve a list of Decedents for given user."""
 
-    # get user from id
-    user = User.objects.get(pk=user_id)
-    # query decedent for records that have that user as user
-    decedents = Decedent.objects.filter(user=user)
-    # return that list
-    return decedents
+    return Decedent.objects.filter(
+        user=get_user_by_id(user_id),
+    )
