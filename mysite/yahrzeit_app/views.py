@@ -1,32 +1,47 @@
 """View functions for yahrzeit app."""
 
+from typing import Union
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
+from django.http import (
+    HttpRequest,
+    HttpResponse,
+    HttpResponseRedirect,
+    JsonResponse,
+)
 from yahrzeit_app import helpers
 from yahrzeit_app import crud
 
 
-#home - intro and form to calculate yahrzeit date
-# TODO is request of type HttpRequest? (type hinting)
-def index(request):
+def index(request: HttpRequest) -> Union[HttpResponse, HttpResponseRedirect]:
     """Render homepage."""
 
     if request.session.get('user_id'):
         return redirect('dashboard')
+
+    today = helpers.today_date_string()
     
-    context = {'js_key': helpers.js_key}
+    context = {
+        'js_key': helpers.js_key,
+        'today': today,
+    }
 
     return render(request, 'index.html', context)
 
-#create account
-def create_account_form(request):
+
+def create_account_form(request: HttpRequest) -> Union[
+    HttpResponse,
+    HttpResponseRedirect,
+]:
     """Render create account form."""
+
+    if request.session.get('user_id'):
+        return redirect('dashboard')
 
     return render(request, 'create_account.html')
 
 
-def create_account(request):
+def create_account(request: HttpRequest) -> HttpResponseRedirect:
     """Perform checks and save new account to database if checks pass."""
 
     email = request.POST['email']
@@ -39,12 +54,9 @@ def create_account(request):
             'Account successfully created',
         )
         user = crud.get_user_by_email(email)
-        # if result in session, write it to DB
         request.session["user_id"] = user.pk
 
-        # request.session['result']['decedent_name']
         result = request.session.get('result')
-
         if result:
             crud.create_decedent(
                 user,
@@ -67,8 +79,10 @@ def create_account(request):
         return redirect('index')
 
 
-#login
-def login_form(request):
+def login_form(request: HttpRequest) -> Union[
+    HttpResponse,
+    HttpResponseRedirect,
+]:
     """Render login form."""
 
     if request.session.get('user_id'):
@@ -77,7 +91,7 @@ def login_form(request):
     return render(request, 'login.html')
 
 
-def login(request):
+def login(request: HttpRequest) -> HttpResponseRedirect:
     """Perform checks and log user in if checks pass."""
 
     email = request.POST['email']
@@ -86,16 +100,14 @@ def login(request):
     user = crud.get_user_by_email(email)
 
     if user and user.check_password(password):
-        #Log user in, redirect to dashboard
         request.session['user_id'] = user.pk
         messages.add_message(
             request,
             messages.INFO,
             'Logged in successfully',
         )
-        # If result in session, write to DB
-        result = request.session.get('result')
 
+        result = request.session.get('result')
         if result:
             crud.create_decedent(
                 user,
@@ -107,17 +119,18 @@ def login(request):
             del request.session['result']
 
         return redirect('dashboard')
+    
     else:
-        #Redirect to index, flash either username or password incorrect
         messages.add_message(
             request,
             messages.INFO,
             'Incorrect username or password',
         )
+
         return redirect('index')
     
 
-def logout(request):
+def logout(request: HttpRequest) -> HttpResponseRedirect:
     """Log current user out."""
 
     user_id = request.session.get('user_id')
@@ -130,8 +143,10 @@ def logout(request):
     return redirect('index')
 
 
-#user dashboard - list of decedents and dates, option to add a decedent, option to recieve email reminders
-def dashboard(request):
+def dashboard(request: HttpRequest) -> Union[
+    HttpResponse,
+    HttpResponseRedirect,
+]:
     """Render user dashboard."""
 
     user_id = request.session.get('user_id')
@@ -140,8 +155,6 @@ def dashboard(request):
         return redirect('index')
     
     decedents = crud.get_decedents_for_user(user_id)
-    print(decedents)
-
     context = {
         'decedents': decedents,
     }
@@ -149,32 +162,30 @@ def dashboard(request):
     return render(request, 'dashboard.html', context)
 
 
-#calculate
-def calculate(request):
+def calculate(request: HttpRequest) -> HttpResponse:
     """Calculate next yahrzeit date."""
-    #TODO Should this be get since we're not writing to database?
+    #TODO Should this be GET since we're not writing to database?
 
     decedent_name = request.POST['decedent-name']
     decedent_date = request.POST['decedent-date']
+
     sunset = request.POST['TOD']
     after_sunset = False if sunset == 'before-sunset' else True
+
     num_years = int(request.POST['number'])
 
     next_date_h, next_date_g, is_it_today = helpers.get_next_date(decedent_date, after_sunset)
 
     following_dates = helpers.get_following_dates(next_date_h, num_years-1)
 
-    next_date_h_res = helpers.h_date_stringify_res(next_date_h)
-    next_date_g_res = helpers.g_date_stringify_res(next_date_g)
-
     next_date_h_db = helpers.h_date_stringify_db(next_date_h)
     next_date_g_db = helpers.g_date_stringify_db(next_date_g)
 
     user_id = request.session.get('user_id')
-    # if user in session
+
     if user_id:
         user = crud.get_user_by_id(user_id)
-        # write to db
+
         crud.create_decedent(
             user,
             decedent_name,
@@ -182,19 +193,8 @@ def calculate(request):
             next_date_h_db,
             next_date_g_db,
         )
-        # display new date on dashboard
-        return redirect('dashboard')
 
-    # else
     else:
-        template_context = {
-            'next_date_h': next_date_h_res,
-            'next_date_g': next_date_g_res,
-            'following_dates': following_dates,
-            'is_it_today': is_it_today,
-            'decedent_name': decedent_name,
-        }
-
         result_for_sesh = {
             'decedent_name': decedent_name,
             'death_date_h': helpers.greg_to_heb(decedent_date),
@@ -204,11 +204,21 @@ def calculate(request):
 
         request.session['result'] = result_for_sesh
 
-        return render(request, 'result.html', template_context)
-        # go to page that shows result and asks to login/create acct
+    next_date_h_res = helpers.h_date_stringify_res(next_date_h)
+    next_date_g_res = helpers.g_date_stringify_res(next_date_g)
+    
+    template_context = {
+        'next_date_h': next_date_h_res,
+        'next_date_g': next_date_g_res,
+        'following_dates': following_dates,
+        'is_it_today': is_it_today,
+        'decedent_name': decedent_name,
+    }
+
+    return render(request, 'result.html', template_context)
 
 
-def get_sunset_time(request, date_string, location_string):
+def get_sunset_time(request: HttpRequest, date_string, location_string) -> JsonResponse:
     """API endpoint that returns JSON data of sunset time for given day."""
 
     sunset_time = helpers.get_sunset_time_helper(date_string, location_string)
