@@ -25,20 +25,40 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #010101;">
+    <nav
+      class="navbar navbar-light navbar-expand-lg"
+      style="background-color: #010101;"
+    >
       <div class="container-fluid">
           <a class="navbar-brand" href="/yahrzeit">
-            <img src="/static/img/Symbol-White.png" alt="" width="110" height="110">
+            <img
+              src="/static/img/Symbol-White.png"
+              alt=""
+              width="110"
+              height="110"
+            >
           </a>
           <div class="collapse navbar-collapse nav-buttons-2020 desktop">
             <div class="navbar-nav">
-              <a class="navigation-link-2022 big w-nav-link" href="/yahrzeit">What is a Yahrzeit?</a>
+              <a class="navigation-link-2022 big w-nav-link" href="/yahrzeit">
+                What is a Yahrzeit?
+              </a>
             </div>
             <div class="navbar-nav">
-              <a class="navigation-link-2022 big w-nav-link" href="{% url 'create_account_form' %}">Create an Account</a>
+              <a
+                class="navigation-link-2022 big w-nav-link"
+                href="{% url 'create_account_form' %}"
+              >
+                Create an Account
+              </a>
             </div>
             <div class="navbar-nav">
-                <a class="navigation-link-2022 big w-nav-link" href="{% url 'login_form' %}">Login</a>
+                <a
+                  class="navigation-link-2022 big w-nav-link"
+                  href="{% url 'login_form' %}"
+                >
+                  Login
+                </a>
             </div>
           </div>
       </div>
@@ -47,7 +67,9 @@
     {% if messages %}
     <div class="messages">
         {% for message in messages %}
-        <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+        <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+          {{ message }}
+        </p>
         {% endfor %}
     </div>
     {% endif %}
@@ -65,14 +87,27 @@
                 <p class="footer-text">Celebrate your loved ones.</p>
               </div>
             </div>
-            <div id="w-node-e2614b17-f0fd-3ff9-42dd-4e8c381b3c03-c432da1b" class="footer-grid-item">
+            <div
+              id="w-node-e2614b17-f0fd-3ff9-42dd-4e8c381b3c03-c432da1b"
+              class="footer-grid-item"
+            >
               <h4 class="headline">Connect</h4>
               <div class="div-block-51">
                 <p class="footer-text">
-                  <a href="{% url 'create_account_form' %}" class="footer-link">Create Account</a>
+                  <a
+                    href="{% url 'create_account_form' %}"
+                    class="footer-link"
+                  >
+                    Create Account
+                  </a>
                 </p>
                 <p class="footer-text">
-                  <a href="{% url 'login_form' %}" class="footer-link">Login</a>
+                  <a
+                    href="{% url 'login_form' %}"
+                    class="footer-link"
+                  >
+                    Login
+                  </a>
                 </p>
                 <p class="footer-text">
                   <a href="" class="footer-link">What is a Yahrzeit?</a>

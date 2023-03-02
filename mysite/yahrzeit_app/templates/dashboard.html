@@ -4,7 +4,10 @@
 
 {% block body %}
 
-<div class="d-flex flex-column calculator-wrapper align-items-center" style="min-height: 100vh"><br>
+<div
+    class="d-flex flex-column calculator-wrapper align-items-center"
+    style="min-height: 100vh"
+><br>
     <h2>Your Dashboard</h2>
     <a href="{% url 'logout' %}">Log Out</a>
     {% for d in decedents %}

@@ -3,7 +3,10 @@
 {% block title %}Result{% endblock %}
 
 {% block body %}
-<div class="d-flex flex-column form-center calculator-wrapper justify-content-center align-items-center" style="min-height: 100vh">
+<div
+  class="d-flex flex-column form-center calculator-wrapper justify-content-center align-items-center"
+  style="min-height: 100vh"
+>
 
   {% if is_it_today %}
   <h3>
@@ -16,11 +19,12 @@
   {% endif %}
   <br><br>
 
-
+  {% if following_dates %}
   <h4>Upcoming Yahrzeit Dates:</h4><br>
   {% for h_date, g_date in following_dates.items %}
   <h5>Hebrew: {{ h_date }} - Gregorian: {{ g_date }}</h5>
   {% endfor %}
+  {% endif %}
   <br><br>
 
   <h5>
