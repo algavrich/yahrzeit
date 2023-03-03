@@ -95,7 +95,7 @@ def login(request: HttpRequest) -> HttpResponseRedirect:
 
     user = crud.get_user_by_email(email)
 
-    if user and user.check_password(password):
+    if user and helpers.verify_password(user, password):
         request.session['user_id'] = user.pk
         messages.add_message(
             request,
