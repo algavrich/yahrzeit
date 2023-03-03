@@ -1,13 +1,14 @@
 """CRUD module for yahrzeit app."""
 
 from yahrzeit_app.models import User, Decedent
+from yahrzeit_app.helpers import hash_password
 
 
 def create_user(email: str, password: str) -> bool:
     """Instantiate a User with given attributes and save to database."""
 
     if not get_user_by_email(email):
-        new_user = User(password=password, email=email)
+        new_user = User(password=hash_password(password), email=email)
         new_user.save()
         
         return True
@@ -42,6 +43,7 @@ def create_decedent(user: User, name: str, death_date_hebrew: str,
         next_date_gregorian=next_date_gregorian,
     )
     new_decedent.save()
+
 
 def get_decedents_for_user(user_id):
     """Retrieve a list of Decedents for given user."""
