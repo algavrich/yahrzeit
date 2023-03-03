@@ -7,17 +7,12 @@ class User(models.Model):
 	"""Model for a User."""
 
 	email= models.EmailField(max_length=100, unique=True)
-	password = models.CharField(max_length=30)
+	password = models.CharField(max_length=200)
 
 	def __repr__(self) -> str:
 		"""String representation for User."""
 
 		return f"<User email={self.email}>"
-
-	def check_password(self, password: str) -> bool:
-		"""Return True if password matches, False otherwise."""
-
-		return password == self.password
 
 
 class Decedent(models.Model):
