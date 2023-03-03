@@ -5,10 +5,15 @@ import os
 from typing import Tuple, Dict
 from astral import LocationInfo, sun
 from pyluach import dates, hebrewcal
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
 import googlemaps
+from yahrzeit_app.models import User
 
 gmaps_key = os.environ['GMAPS_KEY']
 js_key = os.environ['JS_KEY']
+
+ph = PasswordHasher()
 
 
 def date_from_string(date_string: str) -> datetime.date:
@@ -178,3 +183,25 @@ def get_sunset_time_helper(
         return
 
     return (datetime.strftime(sunset, '%-I:%M %p'))
+
+
+def hash_password(password: str) -> str:
+    """Hash a password."""
+
+    return ph.hash(password)
+
+
+def verify_password(user: User, password: str) -> bool:
+    """Verify a user's password for login."""
+
+    try:
+        hash = user.password
+
+        if ph.check_needs_rehash(hash):
+            user.password = hash_password(password)
+            user.save()
+            
+        return ph.verify(hash, password)
+
+    except VerifyMismatchError:
+        return False
