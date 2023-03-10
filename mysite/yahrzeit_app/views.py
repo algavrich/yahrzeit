@@ -17,14 +17,14 @@ from yahrzeit_app import crud
 def index(request: HttpRequest) -> Union[HttpResponse, HttpResponseRedirect]:
     """Render homepage."""
 
-    if request.session.get('user_id'):
-        return redirect('dashboard')
+    logged_in = True if request.session.get('user_id') else False
 
     today = helpers.today_date_string()
     
     context = {
         'js_key': helpers.js_key,
         'today': today,
+        'logged_in': logged_in,
     }
 
     return render(request, 'index.html', context)
