@@ -1,7 +1,12 @@
 """CRUD module for yahrzeit app."""
 
+from django.db.models import QuerySet
 from yahrzeit_app.models import User, Decedent
-from yahrzeit_app.helpers import hash_password
+from yahrzeit_app.helpers import (
+    hash_password,
+    today_date_string,
+    get_next_date,
+)
 
 
 def create_user(email: str, password: str) -> bool:
@@ -45,9 +50,24 @@ def create_decedent(user: User, name: str, death_date_hebrew: str,
     new_decedent.save()
 
 
-def get_decedents_for_user(user_id):
+def get_decedents_for_user(user_id: int) -> QuerySet:
     """Retrieve a list of Decedents for given user."""
 
     return Decedent.objects.filter(
         user=get_user_by_id(user_id),
     )
+
+
+def update_decedents_for_user(user: User) -> None:
+    """Update related decedent records for a user."""
+
+    needs_update = Decedent.objects.filter(
+        user=user.pk,
+        next_date_gregorian__lt=today_date_string(),
+    )
+
+    for decedent in needs_update:
+        next_date_data = get_next_date(decedent.next_date_gregorian)
+        decedent.next_date_hebrew = next_date_data[0]
+        decedent.next_date_gregorian = next_date_data[1]
+        decedent.save()
