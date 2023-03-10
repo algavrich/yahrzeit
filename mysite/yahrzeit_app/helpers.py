@@ -47,7 +47,7 @@ def today_date_string() -> str:
     return date.strftime(date.today(), '%Y-%m-%d')
 
 
-def get_next_date(date_string:str, after_sunset: bool) -> Tuple:
+def get_next_date(date_string: str, after_sunset: bool=False) -> Tuple:
     """Calculate next yahrzeit date."""
 
     date_as_date = date_from_string(date_string)
