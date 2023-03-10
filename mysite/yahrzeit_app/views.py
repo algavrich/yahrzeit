@@ -103,6 +103,8 @@ def login(request: HttpRequest) -> HttpResponseRedirect:
             'Logged in successfully',
         )
 
+        crud.update_decedents_for_user(user)
+
         result = request.session.get('result')
         if result:
             crud.create_decedent(
