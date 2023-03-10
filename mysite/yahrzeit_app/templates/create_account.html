@@ -2,6 +2,25 @@
 
 {% block title %}Create Account{% endblock %}
 
+{% block navbar %}
+<div class="navbar-nav">
+	<a
+		class="navigation-link-2022 big w-nav-link"
+		href="{% url 'index' %}"
+	>
+		Calculate
+	</a>
+</div>
+<div class="navbar-nav">
+	<a
+		class="navigation-link-2022 big w-nav-link"
+		href="{% url 'login_form' %}"
+	>
+		Login
+	</a>
+</div>
+{% endblock %}
+
 {% block body %}
 
 <div
@@ -34,7 +53,7 @@
 					name="password"
 					id="password"
 					placeholder="Password"
-				>
+				><br>
 				<label for="password" hidden>Retype Password</label><br>
 				<input
 					type="password"
@@ -59,7 +78,7 @@
 {% block after_body %}
 <script src="/static/js/create_account.js"></script>
 <script
-src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"
+	src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"
 >
 </script>
 {% endblock %}

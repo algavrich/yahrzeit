@@ -2,19 +2,37 @@
 
 {% block title %}Dashboard{% endblock %}
 
+{% block navbar %}
+<div class="navbar-nav">
+  <a
+    class="navigation-link-2022 big w-nav-link"
+    href="{% url 'index' %}"
+  >
+    Calculate
+  </a>
+</div>
+<div class="navbar-nav">
+  <a
+    class="navigation-link-2022 big w-nav-link"
+    href="{% url 'logout' %}"
+  >
+    Logout
+  </a>
+</div>
+{% endblock %}
+
 {% block body %}
 
 <div
-    class="d-flex flex-column calculator-wrapper align-items-center"
-    style="min-height: 100vh"
+  class="d-flex flex-column calculator-wrapper align-items-center"
+  style="min-height: 100vh"
 ><br>
-    <h2>Your Dashboard</h2>
-    <a href="{% url 'logout' %}">Log Out</a>
-    {% for d in decedents %}
-    <p>
-        {{ d.name }}'s next yahrzeit is {{ d.next_date_hebrew }} / {{ d.next_date_gregorian }}
-    </p>
-    {% endfor %}
+  <h2>Your Dashboard</h2>
+  {% for d in decedents %}
+  <p>
+    {{ d.name }}'s next yahrzeit is {{ d.next_date_hebrew }} / {{ d.next_date_gregorian }}
+  </p>
+  {% endfor %}
 </div>
 
 

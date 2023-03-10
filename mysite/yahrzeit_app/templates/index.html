@@ -2,8 +2,42 @@
 
 {% block title %}Homepage{% endblock %}
 
-{% block head %}
-
+{% block navbar %}
+{% if not logged_in %}
+<div class="navbar-nav">
+	<a
+		class="navigation-link-2022 big w-nav-link"
+		href="{% url 'create_account_form' %}"
+	>
+		Create an Account
+	</a>
+</div>
+<div class="navbar-nav">
+	<a
+		class="navigation-link-2022 big w-nav-link"
+		href="{% url 'login_form' %}"
+	>
+		Login
+	</a>
+</div>
+{% else %}
+<div class="navbar-nav">
+	<a
+		class="navigation-link-2022 big w-nav-link"
+		href="{% url 'dashboard' %}"
+	>
+		Dashboard
+	</a>
+</div>
+<div class="navbar-nav">
+	<a
+		class="navigation-link-2022 big w-nav-link"
+		href="{% url 'logout' %}"
+	>
+		Logout
+	</a>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block body %}
@@ -48,7 +82,7 @@
 						<input type="radio" id="after-sunset" name="TOD" value="after-sunset">
 						<label for="after-sunset" id="after-sunset-label">
 							<h4>After Sunset</h4>
-						</label>
+						</label><br><br>
 					</div>
 					<label for="number"><h4>Number of Years to Calculate</h4></label><br>
 					<input
@@ -61,7 +95,7 @@
 						value="1"
 					>
 				</fieldset>
-				<br><br>
+				<br>
 				<input type="submit" class="btn-outlined--black"value="Submit">
 			</form>
 		</div>
@@ -70,5 +104,7 @@
 
 {% block after_body %}
 <script src="/static/js/index.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key={{ js_key }}&libraries=places&callback=useAutocomplete"></script>
+<script
+	src="https://maps.googleapis.com/maps/api/js?key={{ js_key }}&libraries=places&callback=useAutocomplete"
+></script>
 {% endblock %}

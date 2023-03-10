@@ -44,22 +44,7 @@
                 What is a Yahrzeit?
               </a>
             </div>
-            <div class="navbar-nav">
-              <a
-                class="navigation-link-2022 big w-nav-link"
-                href="{% url 'create_account_form' %}"
-              >
-                Create an Account
-              </a>
-            </div>
-            <div class="navbar-nav">
-                <a
-                  class="navigation-link-2022 big w-nav-link"
-                  href="{% url 'login_form' %}"
-                >
-                  Login
-                </a>
-            </div>
+            {% block navbar %}{% endblock %}
           </div>
       </div>
     </nav>

@@ -2,6 +2,25 @@
 
 {% block title %}Result{% endblock %}
 
+{% block navbar %}
+<div class="navbar-nav">
+	<a
+		class="navigation-link-2022 big w-nav-link"
+		href="{% url 'create_account_form' %}"
+	>
+		Create an Account
+	</a>
+</div>
+<div class="navbar-nav">
+	<a
+		class="navigation-link-2022 big w-nav-link"
+		href="{% url 'login_form' %}"
+	>
+    Login
+	</a>
+</div>
+{% endblock %}
+
 {% block body %}
 <div
   class="d-flex flex-column form-center calculator-wrapper justify-content-center align-items-center"

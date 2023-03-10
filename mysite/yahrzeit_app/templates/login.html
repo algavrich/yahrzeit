@@ -2,6 +2,25 @@
 
 {% block title %}Log In{% endblock %}
 
+{% block navbar %}
+<div class="navbar-nav">
+	<a
+		class="navigation-link-2022 big w-nav-link"
+		href="{% url 'index' %}"
+	>
+		Calculate
+	</a>
+</div>
+<div class="navbar-nav">
+	<a
+		class="navigation-link-2022 big w-nav-link"
+		href="{% url 'create_account_form' %}"
+	>
+		Create an Account
+	</a>
+</div>
+{% endblock %}
+
 {% block body %}
 
 <div
