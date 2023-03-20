@@ -2,7 +2,7 @@
 
 from datetime import datetime, date
 import os
-from typing import Tuple, Dict
+from typing import Tuple, Dict, Union
 from astral import LocationInfo, sun
 from pyluach import dates, hebrewcal
 from argon2 import PasswordHasher
@@ -32,12 +32,12 @@ def greg_to_heb(greg_str: str) -> str:
     )
 
 
-def adjust_adar_leap(month:int, year: int) -> int:
+def adjust_adar_leap(month: int, year: int) -> int:
     """Return yahrzeit month adjusted for future year's leap status."""
 
     if (month == 13 and not hebrewcal.Year(year).leap):
         return 12
-    
+
     return month
 
 
@@ -47,7 +47,7 @@ def today_date_string() -> str:
     return date.strftime(date.today(), '%Y-%m-%d')
 
 
-def get_next_date(date_string: str, after_sunset: bool=False) -> Tuple:
+def get_next_date(date_string: str, after_sunset: bool = False) -> Tuple:
     """Calculate next yahrzeit date."""
 
     date_as_date = date_from_string(date_string)
@@ -55,9 +55,9 @@ def get_next_date(date_string: str, after_sunset: bool=False) -> Tuple:
 
     if after_sunset:
         hebrew_date = hebrew_date.add(days=1)
-  
+
     today_h = dates.HebrewDate.today()
-        
+
     this_h_year_yahr = dates.HebrewDate(
         today_h.year,
         adjust_adar_leap(hebrew_date.month, today_h.year),
@@ -111,9 +111,9 @@ def g_date_stringify_db(gregorian_date: dates.GregorianDate) -> date:
 
 
 def get_following_dates(
-        next_date_h: dates.HebrewDate,
-        num_years: int,
-    ) -> Dict:
+    next_date_h: dates.HebrewDate,
+    num_years: int,
+) -> Dict:
     """Return dictionary of hebrew and gregorian dates for specified number
     of future years.
 
@@ -152,10 +152,10 @@ def get_timezone(coordinates: tuple) -> str:
     return gmaps.timezone(coordinates)
 
 
-def get_sunset_time_helper(
-        date_string: str,
-        location_string: str,
-    ) -> datetime.time:
+def get_sunset_time(
+    date_string: str,
+    location_string: str,
+) -> Union[str, None]:
     """Get time of sunset on given day at given location."""
 
     location_data = geocode_address(location_string)
@@ -178,7 +178,7 @@ def get_sunset_time_helper(
             date_from_string(date_string),
             tz,
         )
-        
+
     except ValueError:
         return
 
@@ -200,7 +200,7 @@ def verify_password(user: User, password: str) -> bool:
         if ph.check_needs_rehash(hash):
             user.password = hash_password(password)
             user.save()
-            
+
         return ph.verify(hash, password)
 
     except VerifyMismatchError:

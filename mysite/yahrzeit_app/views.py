@@ -20,7 +20,7 @@ def index(request: HttpRequest) -> Union[HttpResponse, HttpResponseRedirect]:
     logged_in = True if request.session.get('user_id') else False
 
     today = helpers.today_date_string()
-    
+
     context = {
         'js_key': helpers.js_key,
         'today': today,
@@ -74,7 +74,6 @@ def create_account(request: HttpRequest) -> JsonResponse:
     return JsonResponse({'status': 'failure'})
 
 
-
 def login_form(request: HttpRequest) -> Union[
     HttpResponse,
     HttpResponseRedirect,
@@ -117,7 +116,7 @@ def login(request: HttpRequest) -> HttpResponseRedirect:
             del request.session['result']
 
         return redirect('dashboard')
-    
+
     else:
         messages.add_message(
             request,
@@ -126,7 +125,7 @@ def login(request: HttpRequest) -> HttpResponseRedirect:
         )
 
         return redirect('index')
-    
+
 
 def logout(request: HttpRequest) -> HttpResponseRedirect:
     """Log current user out."""
@@ -135,7 +134,7 @@ def logout(request: HttpRequest) -> HttpResponseRedirect:
 
     if not user_id:
         return redirect('index')
-    
+
     del request.session['user_id']
 
     return redirect('index')
@@ -151,7 +150,7 @@ def dashboard(request: HttpRequest) -> Union[
 
     if not user_id:
         return redirect('index')
-    
+
     decedents = crud.get_decedents_for_user(user_id)
     context = {
         'decedents': decedents,
@@ -162,7 +161,7 @@ def dashboard(request: HttpRequest) -> Union[
 
 def calculate(request: HttpRequest) -> HttpResponse:
     """Calculate next yahrzeit date."""
-    #TODO Should this be GET since we're not writing to database?
+    # TODO Should this be GET since we're not writing to database?
 
     decedent_name = request.POST['decedent-name']
     decedent_date = request.POST['decedent-date']
@@ -172,7 +171,10 @@ def calculate(request: HttpRequest) -> HttpResponse:
 
     num_years = int(request.POST['number'])
 
-    next_date_h, next_date_g, is_it_today = helpers.get_next_date(decedent_date, after_sunset)
+    next_date_h, next_date_g, is_it_today = helpers.get_next_date(
+        decedent_date,
+        after_sunset,
+    )
 
     following_dates = helpers.get_following_dates(next_date_h, num_years-1)
 
@@ -204,7 +206,7 @@ def calculate(request: HttpRequest) -> HttpResponse:
 
     next_date_h_res = helpers.h_date_stringify_res(next_date_h)
     next_date_g_res = helpers.g_date_stringify_res(next_date_g)
-    
+
     template_context = {
         'next_date_h': next_date_h_res,
         'next_date_g': next_date_g_res,
@@ -219,6 +221,6 @@ def calculate(request: HttpRequest) -> HttpResponse:
 def get_sunset_time(request: HttpRequest, date_string, location_string) -> JsonResponse:
     """API endpoint that returns JSON data of sunset time for given day."""
 
-    sunset_time = helpers.get_sunset_time_helper(date_string, location_string)
-    
+    sunset_time = helpers.get_sunset_time(date_string, location_string)
+
     return JsonResponse({'sunset_time': sunset_time})
