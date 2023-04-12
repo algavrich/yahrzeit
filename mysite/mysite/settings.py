@@ -101,6 +101,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'yahrzeit_app.CustomUser'
+
+LOGIN_URL = '/yahrzeit/login-form'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -124,9 +128,9 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
+TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=yahrzeit_app.helpers, yahrzeit_app.crud',
-]
+# NOSE_ARGS = [
+#     '--with-coverage',
+#     '--cover-package=yahrzeit_app.helpers, yahrzeit_app.crud, yahrzeit_app.views',
+# ]
