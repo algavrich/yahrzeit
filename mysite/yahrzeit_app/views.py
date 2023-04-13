@@ -4,6 +4,8 @@ import json
 from typing import Union
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout, authenticate
 from django.http import (
     HttpRequest,
     HttpResponse,
@@ -17,7 +19,7 @@ from yahrzeit_app import crud
 def index(request: HttpRequest) -> Union[HttpResponse, HttpResponseRedirect]:
     """Render homepage."""
 
-    logged_in = True if request.session.get('user_id') else False
+    logged_in = request.user.is_authenticated
 
     today = helpers.today_date_string()
 
@@ -36,27 +38,28 @@ def create_account_form(request: HttpRequest) -> Union[
 ]:
     """Render create account form."""
 
-    if request.session.get('user_id'):
+    if request.user.is_authenticated:
         return redirect('dashboard')
 
     return render(request, 'create_account.html')
 
 
-def create_account(request: HttpRequest) -> JsonResponse:
+def do_create_account(request: HttpRequest) -> JsonResponse:
     """API!!! Perform checks and save new account to database if checks pass."""
 
     request_data = json.loads(request.body)
     email = request_data['email']
     password = request_data['password']
 
-    if crud.create_user(email, password):
+    user = crud.create_user(email, password)
+
+    if user:
         messages.add_message(
             request,
             messages.INFO,
             'Account successfully created',
         )
-        user = crud.get_user_by_email(email)
-        request.session["user_id"] = user.pk
+        login(request, user=user)
 
         result = request.session.get('result')
         if result:
@@ -80,27 +83,22 @@ def login_form(request: HttpRequest) -> Union[
 ]:
     """Render login form."""
 
-    if request.session.get('user_id'):
+    if request.user.is_authenticated:
         return redirect('dashboard')
 
     return render(request, 'login.html')
 
 
-def login(request: HttpRequest) -> HttpResponseRedirect:
+def do_login(request: HttpRequest) -> HttpResponseRedirect:
     """Perform checks and log user in if checks pass."""
 
     email = request.POST['email']
     password = request.POST['password']
 
-    user = crud.get_user_by_email(email)
+    user = authenticate(request, email=email, password=password)
 
-    if user and helpers.verify_password(user, password):
-        request.session['user_id'] = user.pk
-        messages.add_message(
-            request,
-            messages.INFO,
-            'Logged in successfully',
-        )
+    if user:
+        login(request, user=user)
 
         crud.update_decedents_for_user(user)
 
@@ -117,41 +115,32 @@ def login(request: HttpRequest) -> HttpResponseRedirect:
 
         return redirect('dashboard')
 
-    else:
-        messages.add_message(
-            request,
-            messages.INFO,
-            'Incorrect username or password',
-        )
+    messages.add_message(
+        request,
+        messages.INFO,
+        'Incorrect username or password',
+    )
 
-        return redirect('index')
+    return redirect('login_form')
 
 
-def logout(request: HttpRequest) -> HttpResponseRedirect:
+def do_logout(request: HttpRequest) -> HttpResponseRedirect:
     """Log current user out."""
 
-    user_id = request.session.get('user_id')
-
-    if not user_id:
-        return redirect('index')
-
-    del request.session['user_id']
+    logout(request)
 
     return redirect('index')
 
 
+@login_required
 def dashboard(request: HttpRequest) -> Union[
     HttpResponse,
     HttpResponseRedirect,
 ]:
     """Render user dashboard."""
 
-    user_id = request.session.get('user_id')
+    decedents = crud.get_decedents_for_user(request.user)
 
-    if not user_id:
-        return redirect('index')
-
-    decedents = crud.get_decedents_for_user(user_id)
     context = {
         'decedents': decedents,
     }
@@ -181,13 +170,9 @@ def calculate(request: HttpRequest) -> HttpResponse:
     next_date_h_db = helpers.h_date_stringify_db(next_date_h)
     next_date_g_db = helpers.g_date_stringify_db(next_date_g)
 
-    user_id = request.session.get('user_id')
-
-    if user_id:
-        user = crud.get_user_by_id(user_id)
-
+    if request.user.is_authenticated:
         crud.create_decedent(
-            user,
+            request.user,
             decedent_name,
             helpers.greg_to_heb(decedent_date),
             next_date_h_db,
