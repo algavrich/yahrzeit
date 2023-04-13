@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import User, Decedent
+from .models import CustomUser, Decedent
 
 # Register your models here.
-admin.site.register(User)
+admin.site.register(CustomUser)
 admin.site.register(Decedent)
