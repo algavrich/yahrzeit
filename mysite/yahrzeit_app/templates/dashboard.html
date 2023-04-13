@@ -28,9 +28,9 @@
   style="min-height: 100vh"
 ><br>
   <h2>Your Dashboard</h2>
-  {% for d in decedents %}
+  {% for key, value in decedents.items %}
   <p>
-    {{ d.name }}'s next yahrzeit is {{ d.next_date_hebrew }} / {{ d.next_date_gregorian }}
+    {{ key }}'s next yahrzeit is {{ value }}
   </p>
   {% endfor %}
 </div>
