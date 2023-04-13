@@ -5,7 +5,6 @@ from datetime import date
 from django.test import TestCase
 from pyluach import dates
 from .. import helpers
-from ..models import User
 
 
 class StringConversionsTestCase(TestCase):
@@ -66,6 +65,20 @@ class StringConversionsTestCase(TestCase):
             'Date string should equal \'2023-03-11\'',
         )
 
+    def test_h_date_db_to_res(self):
+        self.assertEqual(
+            helpers.h_date_db_to_res('5783-12-18'),
+            '18 Adar 5783',
+            'Date string should equal \'18 Adar 5783\'',
+        )
+
+    def test_g_date_db_to_res(self):
+        self.assertEqual(
+            helpers.g_date_db_to_res('2023-03-11'),
+            '11 March 2023',
+            'Date string should equal \'11 March 2023\'',
+        )
+
 
 class FutureDatesTestCase(TestCase):
     """Test for functions that calculate future yahrzeits."""
@@ -124,36 +137,4 @@ class SunsetTimeTestCase(TestCase):
             ),
             None,
             'There should be no sunset for this place and date',
-        )
-
-
-class PasswordHashingTestCase(TestCase):
-    """Tests for password hashing functions."""
-
-    def setUp(self):
-        self.test_user = User(
-            email='test@test.test',
-            password=helpers.hash_password('Password1!'),
-        )
-
-    def test_hash_password(self):
-        self.assertEqual(len(self.test_user.password), 97)
-        self.assertEqual(
-            self.test_user.password[:31],
-            '$argon2id$v=19$m=65536,t=3,p=4$',
-            'Hash does not have the correct prefix',
-        )
-
-    def test_verify_password(self):
-        self.assertTrue(
-            helpers.verify_password(
-                self.test_user,
-                'Password1!',
-            )
-        )
-        self.assertFalse(
-            helpers.verify_password(
-                self.test_user,
-                'opihanwlrg',
-            )
         )
