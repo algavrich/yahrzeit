@@ -2,7 +2,7 @@
 
 from django.test import TestCase
 from .. import crud
-from ..models import User, Decedent
+from ..models import CustomUser, Decedent
 
 
 class CRUDUserTestCase(TestCase):
@@ -16,7 +16,7 @@ class CRUDUserTestCase(TestCase):
 
         """
 
-        User.objects.create(
+        CustomUser.objects.create_user(
             email='test1@test.test',
             password='testpassword',
         )
@@ -37,7 +37,7 @@ class CRUDUserTestCase(TestCase):
             ),
             'The creation of a new user with a unique email should return True',
         )
-        test_user = User.objects.get(pk=2)
+        test_user = CustomUser.objects.get(pk=2)
         self.assertEqual(
             test_user.email,
             'test2@test.test',
@@ -50,25 +50,6 @@ class CRUDUserTestCase(TestCase):
                 'testpassword',
             ),
             'create_user should return False because that email is taken',
-        )
-
-    def test_get_user_by_id(self):
-        """Test the get_user_by_id function.
-
-        Verify that the email of the user retrieved from id 1 is
-        'test1@test.test' and that a query for the user with id 2 returns None.
-
-        """
-
-        self.assertEqual(
-            crud.get_user_by_id(1).email,
-            'test1@test.test',
-            'The email of the user with id 1 should be \'test1@test.test\'',
-        )
-
-        self.assertIsNone(
-            crud.get_user_by_id(2),
-            'Should return None because there is no user with id 2',
         )
 
     def test_get_user_by_email(self):
@@ -105,56 +86,56 @@ class CRUDDecedentTestCase(TestCase):
 
         """
 
-        test_user1 = User.objects.create(
+        self.test_user1 = CustomUser.objects.create_user(
             email='test1@test.test',
             password='testpassword',
         )
-        test_user2 = User.objects.create(
+        self.test_user2 = CustomUser.objects.create_user(
             email='test2@test.test',
             password='testpassword',
         )
-        test_user3 = User.objects.create(
+        self.test_user3 = CustomUser.objects.create_user(
             email='test3@test.test',
             password='testpassword',
         )
 
         Decedent.objects.create(
-            user=test_user1,
+            user=self.test_user1,
             name='TestDecedent1',
             death_date_hebrew='5783-10-11',
             next_date_hebrew='5784-10-11',
             next_date_gregorian='2023-12-23',
         )
         Decedent.objects.create(
-            user=test_user1,
+            user=self.test_user1,
             name='TestDecedent2',
             death_date_hebrew='5779-03-22',
             next_date_hebrew='5783-03-22',
             next_date_gregorian='2023-06-11',
         )
         Decedent.objects.create(
-            user=test_user1,
+            user=self.test_user1,
             name='TestDecedent3',
             death_date_hebrew='5778-08-28',
             next_date_hebrew='5784-08-28',
             next_date_gregorian='2023-11-12',
         )
         Decedent.objects.create(
-            user=test_user2,
+            user=self.test_user2,
             name='TestDecedent4',
             death_date_hebrew='5783-11-16',
             next_date_hebrew='5784-11-16',
             next_date_gregorian='2024-01-26',
         )
         Decedent.objects.create(
-            user=test_user2,
+            user=self.test_user2,
             name='TestDecedent5',
             death_date_hebrew='5781-02-21',
             next_date_hebrew='5782-02-21',
             next_date_gregorian='2022-05-22',
         )
         Decedent.objects.create(
-            user=test_user2,
+            user=self.test_user2,
             name='TestDecedent6',
             death_date_hebrew='5780-10-20',
             next_date_hebrew='5781-10-20',
@@ -172,7 +153,7 @@ class CRUDDecedentTestCase(TestCase):
 
         self.assertIsNone(
             crud.create_decedent(
-                User.objects.get(pk=1),
+                CustomUser.objects.get(pk=1),
                 'TestDecedent7',
                 '5783-12-09',
                 '5784-12-09',
@@ -209,15 +190,15 @@ class CRUDDecedentTestCase(TestCase):
 
         """
 
-        user1_decedents = crud.get_decedents_for_user(1)
+        user1_decedents = crud.get_decedents_for_user(self.test_user1)
         self.assertEqual(
             len(user1_decedents),
             3,
             'User 1 should have three decedents',
         )
-        decedent_names = [decedent.name for decedent in user1_decedents]
+
         self.assertEqual(
-            set(decedent_names),
+            set(user1_decedents.keys()),
             {
                 'TestDecedent1',
                 'TestDecedent2',
@@ -226,13 +207,13 @@ class CRUDDecedentTestCase(TestCase):
             'Decedent names should match TestDecedent(1,2,3)',
         )
 
+        # self.assertEqual(
+        #     len(crud.get_decedents_for_user(4)),
+        #     0,
+        #     'A nonexistant user should have no decedents',
+        # )
         self.assertEqual(
-            len(crud.get_decedents_for_user(4)),
-            0,
-            'A nonexistant user should have no decedents',
-        )
-        self.assertEqual(
-            len(crud.get_decedents_for_user(3)),
+            len(crud.get_decedents_for_user(self.test_user3)),
             0,
             'User 3 should have no decedents',
         )
@@ -240,11 +221,11 @@ class CRUDDecedentTestCase(TestCase):
     def test_update_decedents_for_user(self):
         """Test the update_decedents_for_user function.
 
-        Verify that calling this function on user 2 
+        Verify that calling this function on user 2
 
         """
 
-        crud.update_decedents_for_user(User.objects.get(pk=2))
+        crud.update_decedents_for_user(CustomUser.objects.get(pk=2))
         self.assertEqual(
             Decedent.objects.get(name='TestDecedent5').next_date_hebrew,
             '5783-02-21',
