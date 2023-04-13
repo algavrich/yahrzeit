@@ -5,15 +5,10 @@ import os
 from typing import Tuple, Dict, Union
 from astral import LocationInfo, sun
 from pyluach import dates, hebrewcal
-from argon2 import PasswordHasher
-from argon2.exceptions import VerifyMismatchError
 import googlemaps
-from yahrzeit_app.models import User
 
 gmaps_key = os.environ['GMAPS_KEY']
 js_key = os.environ['JS_KEY']
-
-ph = PasswordHasher()
 
 
 def date_from_string(date_string: str) -> datetime.date:
@@ -89,7 +84,7 @@ def get_next_date(date_string: str, after_sunset: bool = False) -> Tuple:
 def h_date_stringify_res(hebrew_date: dates.HebrewDate) -> str:
     """Format Hebrew date as a string for result."""
 
-    return f'{hebrew_date:%-d %B} {hebrew_date.year}'
+    return f'{hebrew_date:%-d %B %Y}'
 
 
 def g_date_stringify_res(gregorian_date: dates.GregorianDate) -> str:
@@ -108,6 +103,22 @@ def g_date_stringify_db(gregorian_date: dates.GregorianDate) -> date:
     """Format Gregorian date as a string for storage in session."""
 
     return f'{gregorian_date:%Y-%m-%d}'
+
+
+def h_date_db_to_res(h_date_str: str) -> str:
+    """Format Hebrew date string (from DB) for dashboard."""
+
+    date_parts = [int(x) for x in h_date_str.split('-')]
+    h_date = dates.HebrewDate(date_parts[0], date_parts[1], date_parts[2])
+    return h_date_stringify_res(h_date)
+
+
+def g_date_db_to_res(g_date_str: str) -> str:
+    """Format Hebrew date string (from DB) for dashboard."""
+
+    date_parts = [int(x) for x in g_date_str.split('-')]
+    g_date = dates.GregorianDate(date_parts[0], date_parts[1], date_parts[2])
+    return g_date_stringify_res(g_date)
 
 
 def get_following_dates(
@@ -183,25 +194,3 @@ def get_sunset_time(
         return
 
     return (datetime.strftime(sunset, '%-I:%M %p'))
-
-
-def hash_password(password: str) -> str:
-    """Hash a password."""
-
-    return ph.hash(password)
-
-
-def verify_password(user: User, password: str) -> bool:
-    """Verify a user's password for login."""
-
-    try:
-        hash = user.password
-
-        if ph.check_needs_rehash(hash):
-            user.password = hash_password(password)
-            user.save()
-
-        return ph.verify(hash, password)
-
-    except VerifyMismatchError:
-        return False
