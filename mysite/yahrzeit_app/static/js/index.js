@@ -21,21 +21,20 @@ function useAutocomplete() {
             const place = autoComplete.getPlace();
             const url = `api/get-sunset-time/${dateInput.value}/${place.formatted_address}`;
             fetch(url)
-            .then((res) => res.json())
-            .then((resData) => {
-                let sunsetTime = resData['sunset_time'];
-                if (sunsetTime === null) {
-                    sunsetTime = '\'Sunset\'';
-                }
-                document.getElementById('before-sunset-label').innerHTML = `Before ${sunsetTime}`;
-                document.getElementById('after-sunset-label').innerHTML = `After ${sunsetTime}`;
-                TODRadios.style.display = 'block';
-            });
-        }  
+                .then((res) => res.json())
+                .then((resData) => {
+                    let sunsetTime = resData['sunset_time'];
+                    if (sunsetTime === null) {
+                        sunsetTime = '\'Sunset\'';
+                    }
+                    document.getElementById('before-sunset-label').innerHTML = `Before ${sunsetTime}`;
+                    document.getElementById('after-sunset-label').innerHTML = `After ${sunsetTime}`;
+                    TODRadios.style.display = 'block';
+                });
+        }
     }
 
     dateInput.addEventListener('change', getSunsetTimes);
 
     autoComplete.addListener('place_changed', getSunsetTimes);
 }
-

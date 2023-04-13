@@ -9,10 +9,10 @@ document.querySelector('.calculator-form').addEventListener('submit', (evt) => {
 
     if (password === retypePassword) {
         if (password.match(/[A-Z]/)
-        && password.match(/[a-z]/)
-        && password.match(/[0-9]/)
-        && password.match(/[!@#$%\^&\*\(\)-_=\+\[\]\{\}\\\|;:'"\,<\.>\/\?~`]/)
-        && password.length >= 8) {
+            && password.match(/[a-z]/)
+            && password.match(/[0-9]/)
+            && password.match(/[!@#$%\^&\*\(\)-_=\+\[\]\{\}\\\|;:'"\,<\.>\/\?~`]/)
+            && password.length >= 8) {
             const csrfToken = Cookies.get('csrftoken');
             console.log(csrfToken);
             fetch('api/create-account', {
