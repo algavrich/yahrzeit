@@ -45,7 +45,7 @@ def create_account_form(request: HttpRequest) -> Union[
 
 
 def do_create_account(request: HttpRequest) -> JsonResponse:
-    """API!!! Perform checks and save new account to database if checks pass."""
+    """API endpoint that performs checks and saves new account to database if checks pass."""
 
     request_data = json.loads(request.body)
     email = request_data['email']
@@ -62,7 +62,8 @@ def do_create_account(request: HttpRequest) -> JsonResponse:
         login(request, user=user)
 
         result = request.session.get('result')
-        if result:
+
+        if result and result['status'] == 'active':
             crud.create_decedent(
                 user,
                 result['decedent_name'],
@@ -103,7 +104,8 @@ def do_login(request: HttpRequest) -> HttpResponseRedirect:
         crud.update_decedents_for_user(user)
 
         result = request.session.get('result')
-        if result:
+
+        if result and result['status'] == 'active':
             crud.create_decedent(
                 user,
                 result['decedent_name'],
@@ -170,29 +172,21 @@ def calculate(request: HttpRequest) -> HttpResponse:
     next_date_h_db = helpers.h_date_stringify_db(next_date_h)
     next_date_g_db = helpers.g_date_stringify_db(next_date_g)
 
-    if request.user.is_authenticated:
-        crud.create_decedent(
-            request.user,
-            decedent_name,
-            helpers.greg_to_heb(decedent_date),
-            next_date_h_db,
-            next_date_g_db,
-        )
+    result_for_sesh = {
+        'decedent_name': decedent_name,
+        'death_date_h': helpers.greg_to_heb(decedent_date),
+        'next_date_h': next_date_h_db,
+        'next_date_g': next_date_g_db,
+        'status': 'dormant',
+    }
 
-    else:
-        result_for_sesh = {
-            'decedent_name': decedent_name,
-            'death_date_h': helpers.greg_to_heb(decedent_date),
-            'next_date_h': next_date_h_db,
-            'next_date_g': next_date_g_db,
-        }
-
-        request.session['result'] = result_for_sesh
+    request.session['result'] = result_for_sesh
 
     next_date_h_res = helpers.h_date_stringify_res(next_date_h)
     next_date_g_res = helpers.g_date_stringify_res(next_date_g)
 
     template_context = {
+        'logged_in': True if request.user.is_authenticated else False,
         'next_date_h': next_date_h_res,
         'next_date_g': next_date_g_res,
         'following_dates': following_dates,
@@ -201,6 +195,39 @@ def calculate(request: HttpRequest) -> HttpResponse:
     }
 
     return render(request, 'result.html', template_context)
+
+
+def save_res(request: HttpRequest) -> JsonResponse:
+    """API endpoint that saves a calculation result for a logged in user."""
+
+    result = request.session.get('result')
+
+    if not result or not request.user.is_authenticated:
+        return JsonResponse({'status': 'failure'})
+
+    crud.create_decedent(
+        request.user,
+        result['decedent_name'],
+        helpers.greg_to_heb(result['death_date_h']),
+        result['next_date_h'],
+        result['next_date_g'],
+    )
+
+    return JsonResponse({'status': 'success'})
+
+
+def activate_res(request: HttpRequest) -> JsonResponse:
+    """API endpoint to activate result for saving upon creation of account or login."""
+
+    result = request.session.get('result')
+
+    if not result:
+        return JsonResponse({'status': 'failure'})
+
+    result['status'] = 'active'
+    request.session.modified = True
+
+    return JsonResponse({'status': 'success'})
 
 
 def get_sunset_time(request: HttpRequest, date_string, location_string) -> JsonResponse:
