@@ -16,6 +16,8 @@ urlpatterns = [
     path('login', views.do_login, name='login'),
     path('logout', views.do_logout, name='logout'),
     path('calculate', views.calculate, name='calculate'),
+    path('api/save-res', views.save_res, name='save_res'),
+    path('api/activate-res', views.activate_res, name='activate_res'),
     path('dashboard', views.dashboard, name='dashboard'),
     path(
         'api/get-sunset-time/<str:date_string>/<str:location_string>',
