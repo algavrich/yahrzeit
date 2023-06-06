@@ -25,7 +25,6 @@
 
 <div
 	class="d-flex flex-column form-center calculator-wrapper justify-content-center align-items-center"
-	style="min-height: 100vh"
 >
 	<div class="form-center">
 		<form
@@ -36,8 +35,8 @@
 		>
 			{% csrf_token %}
 			<fieldset>
-				<legend><h2>Login</h2></legend><br>
-				<label for="email" hidden>Email</label><br>
+				<legend><h2>Login</h2></legend>
+				<label for="email" hidden>Email</label>
 				<input
 					type="email"
 					class="account-input"
@@ -45,8 +44,8 @@
 					id="email"
 					placeholder="Email"
 					required
-				><br>
-				<label for="password" hidden>Password</label><br>
+				>
+				<label for="password" hidden>Password</label>
 				<input
 					type="password"
 					class="account-input"
@@ -55,7 +54,6 @@
 					placeholder="Password"
 				>
 			</fieldset>
-			<br>
 			<input type="submit" class="btn-outlined--black"value="Login">
 		</form>
 	</div>
