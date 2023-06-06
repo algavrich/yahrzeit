@@ -3,22 +3,8 @@
 {% block title %}Create Account{% endblock %}
 
 {% block navbar %}
-<div class="navbar-nav">
-	<a
-		class="navigation-link-2022 big w-nav-link"
-		href="{% url 'index' %}"
-	>
-		Calculate
-	</a>
-</div>
-<div class="navbar-nav">
-	<a
-		class="navigation-link-2022 big w-nav-link"
-		href="{% url 'login_form' %}"
-	>
-		Login
-	</a>
-</div>
+	<a class="nav-item nav-link" href="{% url 'index' %}">Calculate</a>
+	<a class="nav-item nav-link" href="{% url 'login_form' %}">Login</a>
 {% endblock %}
 
 {% block body %}
@@ -36,8 +22,8 @@
 		>
 			{% csrf_token %}
 			<fieldset>
-				<legend><h2>Create Account</h2></legend><br>
-				<label for="email" hidden>Email</label><br>
+				<legend><h2>Create Account</h2></legend>
+				<label for="email" hidden>Email</label>
 				<input
 					type="email"
 					class="account-input"
@@ -45,16 +31,16 @@
 					id="email"
 					placeholder="Email"
 					required
-				><br>
-				<label for="password" hidden>Password</label><br>
+				>
+				<label for="password" hidden>Password</label>
 				<input
 					type="password"
 					class="account-input"
 					name="password"
 					id="password"
 					placeholder="Password"
-				><br>
-				<label for="password" hidden>Retype Password</label><br>
+				>
+				<label for="password" hidden>Retype Password</label>
 				<input
 					type="password"
 					class="account-input"
@@ -64,7 +50,7 @@
 				>
 
 			</fieldset>
-			<br>
+
 			<input
 				type="submit"
 				class="btn-outlined--black"
