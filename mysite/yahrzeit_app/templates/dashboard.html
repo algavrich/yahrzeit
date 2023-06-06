@@ -3,22 +3,8 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block navbar %}
-<div class="navbar-nav">
-  <a
-    class="navigation-link-2022 big w-nav-link"
-    href="{% url 'index' %}"
-  >
-    Calculate
-  </a>
-</div>
-<div class="navbar-nav">
-  <a
-    class="navigation-link-2022 big w-nav-link"
-    href="{% url 'logout' %}"
-  >
-    Logout
-  </a>
-</div>
+  <a class="nav-item nav-link" href="{% url 'index' %}">Calculate</a>
+  <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
 {% endblock %}
 
 {% block body %}
