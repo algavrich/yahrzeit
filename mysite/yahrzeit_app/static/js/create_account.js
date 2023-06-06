@@ -14,7 +14,6 @@ document.querySelector('.calculator-form').addEventListener('submit', (evt) => {
             && password.match(/[!@#$%\^&\*\(\)-_=\+\[\]\{\}\\\|;:'"\,<\.>\/\?~`]/)
             && password.length >= 8) {
             const csrfToken = Cookies.get('csrftoken');
-            console.log(csrfToken);
             fetch('api/create-account', {
                 method: 'POST',
                 body: JSON.stringify({
