@@ -3,32 +3,21 @@
 {% block title %}Log In{% endblock %}
 
 {% block navbar %}
-<div class="navbar-nav">
-	<a
-		class="navigation-link-2022 big w-nav-link"
-		href="{% url 'index' %}"
-	>
+	<a class="nav-item nav-link" href="{% url 'index' %}">
 		Calculate
 	</a>
-</div>
-<div class="navbar-nav">
-	<a
-		class="navigation-link-2022 big w-nav-link"
-		href="{% url 'create_account_form' %}"
-	>
+	<a class="nav-item nav-link" href="{% url 'create_account_form' %}">
 		Create an Account
 	</a>
-</div>
 {% endblock %}
 
 {% block body %}
-
 <div
-	class="d-flex flex-column form-center calculator-wrapper justify-content-center align-items-center"
+	class="row h-100 idx-main-row justify-content-center align-items-center"
 >
-	<div class="form-center">
+	<div class="col form-center">
 		<form
-			class="calculator-form justify-content-center"
+			class="calculator-form"
 			action="{% url 'login' %}"
 			method="post"
 			role="form"
